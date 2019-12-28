@@ -14,27 +14,38 @@ const Visualizer = () => {
   const [grid, setGrid] = useState([]);
 
   useEffect(() => {
-    setInitialGrid();
-  }, [grid]);
+    const grid = getInitialGrid();
+    setGrid(grid);
+  }, []);
 
-  const setInitialGrid = () => {
+  const getInitialGrid = () => {
     const grid = [];
-    for (let row = 0; row < 20; row++) {
+    for (let col = 0; col < 50; col++) {
       const curr = [];
-      for (let col = 0; col < 50; col++) {
+      for (let row = 0; row < 20; row++) {
         curr.push(createNode(row, col));
       }
       grid.push(curr);
     }
-    setGrid(grid);
+    return grid;
   };
 
   const displayGrid = () => {
     return grid.map((row, rowIdx) => (
-      <div key={rowIdx}>
-        {row.map((node, nodeIdx) => (
-          <Node key={nodeIdx} node={node} />
-        ))}
+      <div className="row" key={rowIdx}>
+        {row.map((node, nodeIdx) => {
+          const { row, col, isEnd, isStart, isWall } = node;
+          return (
+            <Node
+              key={nodeIdx}
+              row={row}
+              col={col}
+              isStart={isStart}
+              isEnd={isEnd}
+              isWall={isWall}
+            />
+          );
+        })}
       </div>
     ));
   };

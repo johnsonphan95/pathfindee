@@ -8,6 +8,14 @@ import {
 
 import "./Node.css";
 
-export default Node = ({ node }) => {
-  return <div className="node"></div>;
+export default Node = props => {
+  const { row, col, isStart, isEnd, isWall } = props;
+  const attributes = isEnd
+    ? "node-end"
+    : isStart
+    ? "node-start"
+    : isWall
+    ? "node-wall"
+    : "";
+  return <div id={`${row}-${col}`} className={`node ${attributes}`}></div>;
 };
