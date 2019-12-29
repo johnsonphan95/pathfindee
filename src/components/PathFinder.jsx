@@ -24,10 +24,10 @@ const Visualizer = () => {
 
   const getInitialGrid = () => {
     const grid = [];
-    for (let row = 0; row < 20; row++) {
+    for (let col = 0; col < 40; col++) {
       const curr = [];
-      for (let col = 0; col < 20; col++) {
-        curr.push(createNode(row, col));
+      for (let row = 0; row < 20; row++) {
+        curr.push(createNode(col, row));
       }
       grid.push(curr);
     }
