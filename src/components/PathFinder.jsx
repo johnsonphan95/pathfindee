@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Node from "./Node";
+import NodeObject from "../utils/node";
 import {
   START_NODE_ROW,
   START_NODE_COL,
   END_NODE_ROW,
   END_NODE_COL,
-  createNode
-} from "../utils/util";
+  ROW,
+  COL
+} from "../utils/constants";
 import {
   dijkstra,
   getNodesInShortestPathOrder
@@ -24,13 +26,14 @@ const Visualizer = () => {
 
   const getInitialGrid = () => {
     const grid = [];
-    for (let col = 0; col < 40; col++) {
+    for (let col = 0; col < COL; col++) {
       const curr = [];
-      for (let row = 0; row < 20; row++) {
-        curr.push(createNode(col, row));
+      for (let row = 0; row < ROW; row++) {
+        curr.push(new NodeObject(col, row));
       }
       grid.push(curr);
     }
+    console.log(grid);
     return grid;
   };
 
@@ -64,6 +67,7 @@ const Visualizer = () => {
     const startNode = grid[START_NODE_COL][START_NODE_ROW];
     console.log(startNode);
     const finishNode = grid[END_NODE_COL][END_NODE_ROW];
+    console.log(finishNode);
     if (startNode.visited && finishNode.visited) return;
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
@@ -73,13 +77,13 @@ const Visualizer = () => {
   const displayGrid = () => {
     return grid.map((col, colIdx) => (
       <div className="col" key={colIdx}>
-        {col.map((node, rowIdx) => {
+        {col.map(node => {
           const { row, col, end, start, wall } = node;
           return (
             <Node
-              key={colIdx}
-              row={rowIdx}
-              col={colIdx}
+              key={row}
+              row={row}
+              col={col}
               start={start}
               end={end}
               wall={wall}
