@@ -18,6 +18,7 @@ import "./PathFinder.css";
 
 const Visualizer = () => {
   const [grid, setGrid] = useState([]);
+  const [mouseDown, setMouseDown] = useState(false);
 
   useEffect(() => {
     const grid = getInitialGrid();
@@ -33,8 +34,18 @@ const Visualizer = () => {
       }
       grid.push(curr);
     }
-    console.log(grid);
     return grid;
+  };
+
+  const getWalledGrid = (col, row) => {
+    const newGrid = grid.slice();
+    const node = grid[col][row];
+    const newNode = {
+      ...node,
+      wall: !node.wall
+    };
+    newGrid[col][row] = newNode;
+    return newGrid;
   };
 
   const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
@@ -65,13 +76,27 @@ const Visualizer = () => {
 
   const visualizeDijkstra = () => {
     const startNode = grid[START_NODE_COL][START_NODE_ROW];
-    console.log(startNode);
     const finishNode = grid[END_NODE_COL][END_NODE_ROW];
-    console.log(finishNode);
     if (startNode.visited && finishNode.visited) return;
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+  };
+
+  const handleMouseDown = (col, row) => {
+    const newGrid = getWalledGrid(col, row);
+    setGrid(newGrid);
+    setMouseDown(true);
+  };
+
+  const handleMouseEnter = (col, row) => {
+    if (!mouseDown) return;
+    const newGrid = getWalledGrid(col, row);
+    setGrid(newGrid);
+  };
+
+  const handleMouseUp = () => {
+    setMouseDown(false);
   };
 
   const displayGrid = () => {
@@ -87,6 +112,10 @@ const Visualizer = () => {
               start={start}
               end={end}
               wall={wall}
+              mouseDown={mouseDown}
+              onMouseDown={(col, row) => handleMouseDown(col, row)}
+              onMouseEnter={(col, row) => handleMouseEnter(col, row)}
+              onMouseUp={() => handleMouseUp()}
             />
           );
         })}

@@ -1,5 +1,11 @@
 .grid {
   display: flex;
-  margin: 100px;
-  widows: 80vw;
+  margin: 10%;
+  width: 80vw;
+  height: 40vw;
+}
+
+.col {
+  height: 100%;
+  width: 2.5%;
 }
