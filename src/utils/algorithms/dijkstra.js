@@ -6,9 +6,7 @@ export const dijkstra = (grid, startNode, endNode) => {
   const heap = new MinHeap([startNode]);
   while (heap) {
     const node = heap.remove();
-    console.log(node);
-    if (!node) return visitedNodes;
-    if (node.distance === Infinity) return visitedNodes;
+    if (!node || node.distance === Infinity) return visitedNodes;
     node.visited = true;
     visitedNodes.push(node);
     if (node === endNode) return visitedNodes;
