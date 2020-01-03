@@ -1,4 +1,6 @@
-Visualizer 
+# Visualizer 
+
+https://johnsonphan95.github.io/visualizer/
 
 Visualizer is a visualization project I made using React to visualize path finding algorithm's through a coordinate grid. Each square in the grid is substantiated as a NodeObject. 
 
