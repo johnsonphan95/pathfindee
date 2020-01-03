@@ -42,7 +42,7 @@ const Visualizer = () => {
     const node = grid[col][row];
     const newNode = {
       ...node,
-      wall: !node.wall
+      wall: node.start || node.end ? false : !node.wall
     };
     newGrid[col][row] = newNode;
     return newGrid;
