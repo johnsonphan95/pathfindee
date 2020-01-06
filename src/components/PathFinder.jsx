@@ -2,14 +2,6 @@ import React, { useState, useEffect } from "react";
 import Node from "./Node";
 import NodeObject from "../utils/node";
 import {
-  START_NODE_ROW,
-  START_NODE_COL,
-  END_NODE_ROW,
-  END_NODE_COL,
-  ROW,
-  COL
-} from "../utils/constants";
-import {
   dijkstra,
   getNodesInShortestPathOrder
 } from "../utils/algorithms/dijkstra";
@@ -19,6 +11,13 @@ import "./PathFinder.css";
 const Visualizer = () => {
   const [grid, setGrid] = useState([]);
   const [mouseDown, setMouseDown] = useState(false);
+  const [moveNode, setMoveNode] = useState(false);
+  const [coordinates, setCoordinates] = useState({
+    START_NODE_COL: 5,
+    START_NODE_ROW: 10,
+    END_NODE_COL: 20,
+    END_NODE_ROW: 10
+  });
 
   useEffect(() => {
     const grid = getInitialGrid();
@@ -27,9 +26,9 @@ const Visualizer = () => {
 
   const getInitialGrid = () => {
     const grid = [];
-    for (let col = 0; col < COL; col++) {
+    for (let col = 0; col < 40; col++) {
       const curr = [];
-      for (let row = 0; row < ROW; row++) {
+      for (let row = 0; row < 20; row++) {
         curr.push(new NodeObject(col, row));
       }
       grid.push(curr);
@@ -46,6 +45,12 @@ const Visualizer = () => {
     };
     newGrid[col][row] = newNode;
     return newGrid;
+  };
+
+  const getNewNodeGrid = (col, row) => {
+    if (!moveNode) return;
+    if (moveNode) {
+    }
   };
 
   const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
@@ -75,6 +80,12 @@ const Visualizer = () => {
   };
 
   const visualizeDijkstra = () => {
+    const {
+      START_NODE_ROW,
+      START_NODE_COL,
+      END_NODE_ROW,
+      END_NODE_COL
+    } = coordinates;
     const startNode = grid[START_NODE_COL][START_NODE_ROW];
     const finishNode = grid[END_NODE_COL][END_NODE_ROW];
     if (startNode.visited && finishNode.visited) return;
@@ -84,15 +95,21 @@ const Visualizer = () => {
   };
 
   const handleMouseDown = (col, row) => {
-    const newGrid = getWalledGrid(col, row);
+    let newGrid;
+    if (grid[col][row].start) {
+      newGrid = getNewNodeGrid(col, row);
+    }
+    newGrid = getWalledGrid(col, row);
     setGrid(newGrid);
     setMouseDown(true);
   };
 
   const handleMouseEnter = (col, row) => {
     if (!mouseDown) return;
-    const newGrid = getWalledGrid(col, row);
-    setGrid(newGrid);
+    if (!moveNode) {
+      const newGrid = getWalledGrid(col, row);
+      setGrid(newGrid);
+    }
   };
 
   const handleMouseUp = () => {
@@ -128,6 +145,8 @@ const Visualizer = () => {
       <button onClick={() => visualizeDijkstra()}>
         Visualize Dijkstra's Algorithm
       </button>
+      <button>Start Node</button>
+      <button>End Node</button>
       <div className="grid">{displayGrid()}</div>
     </div>
   );
