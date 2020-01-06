@@ -29,7 +29,7 @@ const Visualizer = () => {
     for (let col = 0; col < 40; col++) {
       const curr = [];
       for (let row = 0; row < 20; row++) {
-        curr.push(new NodeObject(col, row));
+        curr.push(new NodeObject(col, row, coordinates));
       }
       grid.push(curr);
     }
