@@ -1,6 +1,6 @@
 .grid {
   display: flex;
-  margin: 10%;
+  margin: 5% auto;
   width: 80vw;
   height: 40vw;
 }
@@ -8,4 +8,22 @@
 .col {
   height: 100%;
   width: 2.5%;
+}
+
+.button {
+  padding: 10px;
+  margin: 2px;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: #74bdcb;
+  border: none;
+  color: #e7f2f8;
+  height: 40px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  background-color: #ffa384;
+  height: 50px;
 }

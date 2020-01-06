@@ -11,7 +11,8 @@ import "./PathFinder.css";
 const Visualizer = () => {
   const [grid, setGrid] = useState([]);
   const [mouseDown, setMouseDown] = useState(false);
-  const [moveNode, setMoveNode] = useState(false);
+  const [moveStart, setMoveStart] = useState(false);
+  const [moveEnd, setMoveEnd] = useState(false);
   const [coordinates, setCoordinates] = useState({
     START_NODE_COL: 5,
     START_NODE_ROW: 10,
@@ -47,11 +48,7 @@ const Visualizer = () => {
     return newGrid;
   };
 
-  const getNewNodeGrid = (col, row) => {
-    if (!moveNode) return;
-    if (moveNode) {
-    }
-  };
+  const getNewNodeGrid = (col, row) => {};
 
   const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
@@ -106,7 +103,7 @@ const Visualizer = () => {
 
   const handleMouseEnter = (col, row) => {
     if (!mouseDown) return;
-    if (!moveNode) {
+    if (!moveStart && !moveEnd) {
       const newGrid = getWalledGrid(col, row);
       setGrid(newGrid);
     }
@@ -142,11 +139,13 @@ const Visualizer = () => {
 
   return (
     <div>
-      <button onClick={() => visualizeDijkstra()}>
-        Visualize Dijkstra's Algorithm
-      </button>
-      <button>Start Node</button>
-      <button>End Node</button>
+      <div className="navbar">
+        <button className="button" onClick={() => visualizeDijkstra()}>
+          Visualize Dijkstra's Algorithm
+        </button>
+        <button className="button">Start Node</button>
+        <button className="button">End Node</button>
+      </div>
       <div className="grid">{displayGrid()}</div>
     </div>
   );
