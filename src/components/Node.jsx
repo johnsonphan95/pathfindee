@@ -9,7 +9,8 @@ const Node = ({
   wall,
   onMouseDown,
   onMouseEnter,
-  onMouseUp
+  onMouseUp,
+  onMouseLeave
 }) => {
   const attributes = end
     ? "node-end"
@@ -24,6 +25,7 @@ const Node = ({
       className={`node ${attributes}`}
       onMouseDown={() => onMouseDown(col, row)}
       onMouseEnter={() => onMouseEnter(col, row)}
+      onMouseLeave={() => onMouseLeave(col, row)}
       onMouseUp={() => onMouseUp()}
     ></div>
   );

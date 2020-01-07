@@ -14,9 +14,9 @@ const Visualizer = () => {
   const [moveStart, setMoveStart] = useState(false);
   const [moveEnd, setMoveEnd] = useState(false);
   const [coordinates, setCoordinates] = useState({
-    START_NODE_COL: 5,
+    START_NODE_COL: 10,
     START_NODE_ROW: 10,
-    END_NODE_COL: 20,
+    END_NODE_COL: 30,
     END_NODE_ROW: 10
   });
 
@@ -48,7 +48,17 @@ const Visualizer = () => {
     return newGrid;
   };
 
-  const getNewNodeGrid = (col, row) => {};
+  const getNewNodeGrid = (col, row) => {
+    const newGrid = grid.slice();
+    const node = grid[col][row];
+    const newNode = {
+      ...node,
+      start: moveStart ? true : false,
+      end: moveEnd ? true : false
+    };
+    newGrid[col][row] = newNode;
+    return newGrid;
+  };
 
   const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
@@ -92,25 +102,58 @@ const Visualizer = () => {
   };
 
   const handleMouseDown = (col, row) => {
-    let newGrid;
     if (grid[col][row].start) {
-      newGrid = getNewNodeGrid(col, row);
+      setMoveStart(true);
+    } else if (grid[col][row].end) {
+      setMoveEnd(true);
+    } else {
+      const newGrid = getWalledGrid(col, row);
+      setGrid(newGrid);
     }
-    newGrid = getWalledGrid(col, row);
-    setGrid(newGrid);
     setMouseDown(true);
   };
 
   const handleMouseEnter = (col, row) => {
+    let newGrid;
+    let newCoordinates = Object.assign({}, coordinates);
     if (!mouseDown) return;
     if (!moveStart && !moveEnd) {
-      const newGrid = getWalledGrid(col, row);
-      setGrid(newGrid);
+      newGrid = getWalledGrid(col, row);
+    }
+    if (moveStart) {
+      newGrid = getNewNodeGrid(col, row);
+      newCoordinates.START_NODE_COL = col;
+      newCoordinates.START_NODE_ROW = row;
+      setCoordinates(newCoordinates);
+    }
+    if (moveEnd) {
+      newGrid = getNewNodeGrid(col, row);
+      newCoordinates.END_NODE_COL = col;
+      newCoordinates.END_NODE_ROW = row;
+      setCoordinates(newCoordinates);
+    }
+    setGrid(newGrid);
+  };
+
+  const handleMouseLeave = (col, row) => {
+    if (!mouseDown) return;
+    if (moveStart || moveEnd) {
+      const newGrid = grid.slice();
+      const node = grid[col][row];
+      const newNode = {
+        ...node,
+        start: false,
+        end: false
+      };
+      newGrid[col][row] = newNode;
+      return newGrid;
     }
   };
 
   const handleMouseUp = () => {
     setMouseDown(false);
+    setMoveStart(false);
+    setMoveEnd(false);
   };
 
   const displayGrid = () => {
@@ -129,6 +172,7 @@ const Visualizer = () => {
               mouseDown={mouseDown}
               onMouseDown={(col, row) => handleMouseDown(col, row)}
               onMouseEnter={(col, row) => handleMouseEnter(col, row)}
+              onMouseLeave={(col, row) => handleMouseLeave(col, row)}
               onMouseUp={() => handleMouseUp()}
             />
           );
@@ -143,8 +187,6 @@ const Visualizer = () => {
         <button className="button" onClick={() => visualizeDijkstra()}>
           Visualize Dijkstra's Algorithm
         </button>
-        <button className="button">Start Node</button>
-        <button className="button">End Node</button>
       </div>
       <div className="grid">{displayGrid()}</div>
     </div>
