@@ -15,15 +15,15 @@
   margin: 2px;
   border-radius: 5px;
   font-weight: bold;
-  background-color: #74bdcb;
+  background-color: #195190;
   border: none;
-  color: #e7f2f8;
+  color: white;
   height: 40px;
 }
 
 .navbar {
   display: flex;
   justify-content: center;
-  background-color: #ffa384;
+  background-color: #263056;
   height: 50px;
 }
