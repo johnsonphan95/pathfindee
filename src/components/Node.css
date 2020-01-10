@@ -1,7 +1,7 @@
 .node {
-  width: 100%;
-  height: 5%;
-  outline: 1px solid white;
+  padding-top: 100%;
+  background-color: white;
+  /* border-radius: 30%; */
 }
 
 .node-start {
@@ -29,22 +29,22 @@
 
 @keyframes visitedAnimation {
   0% {
-    transform: scale(0.5);
+    transform: scale(0.75);
     background-color: #ffda29;
   }
 
   25% {
-    transform: scale(1.25);
+    transform: scale(1);
     background-color: orange;
   }
 
   50% {
-    transform: scale(1.5);
+    /* transform: scale(1.2); */
     background-color: crimson;
   }
 
   75% {
-    transform: scale(1);
+    transform: scale(1.5);
     background-color: orangered;
   }
 
@@ -71,12 +71,12 @@
 
 @keyframes shortestPath {
   0% {
-    transform: scale(0.6);
+    transform: scale(0.5);
     background-color: #98ddde;
   }
 
   50% {
-    transform: scale(1.2);
+    transform: scale(1.5);
   }
 
   100% {

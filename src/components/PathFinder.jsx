@@ -5,7 +5,7 @@ import {
   dijkstra,
   getNodesInShortestPathOrder
 } from "../utils/algorithms/dijkstra";
-
+import { depthFirstSearch } from "../utils/algorithms/dfs";
 import "./PathFinder.css";
 
 const Visualizer = () => {
@@ -97,6 +97,7 @@ const Visualizer = () => {
     const finishNode = grid[END_NODE_COL][END_NODE_ROW];
     if (startNode.visited && finishNode.visited) return;
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
+    console.log(visitedNodesInOrder);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   };
@@ -187,6 +188,7 @@ const Visualizer = () => {
         <button className="button" onClick={() => visualizeDijkstra()}>
           Visualize Dijkstra's Algorithm
         </button>
+        <button className="button">Add Weighted Node</button>
       </div>
       <div className="grid">{displayGrid()}</div>
     </div>
