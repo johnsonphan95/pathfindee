@@ -13,6 +13,7 @@ const Visualizer = () => {
   const [mouseDown, setMouseDown] = useState(false);
   const [moveStart, setMoveStart] = useState(false);
   const [moveEnd, setMoveEnd] = useState(false);
+  const [weighted, setWeighted] = useState(false);
   const [coordinates, setCoordinates] = useState({
     START_NODE_COL: 10,
     START_NODE_ROW: 10,
@@ -58,6 +59,22 @@ const Visualizer = () => {
     };
     newGrid[col][row] = newNode;
     return newGrid;
+  };
+
+  const getWeightedGrid = (col, row) => {
+    const newGrid = grid.slice();
+    const node = grid[col][row];
+    const newNode = {
+      ...node,
+      weight: 5
+    };
+    newGrid[col][row] = newNode;
+    return newGrid;
+  };
+
+  const toggleWeight = () => {
+    weighted ? setWeighted(false) : setWeighted(true);
+    console.log(weighted);
   };
 
   const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
@@ -107,6 +124,9 @@ const Visualizer = () => {
       setMoveStart(true);
     } else if (grid[col][row].end) {
       setMoveEnd(true);
+    } else if (weighted) {
+      const newGrid = getWeightedGrid(col, row);
+      setGrid(newGrid);
     } else {
       const newGrid = getWalledGrid(col, row);
       setGrid(newGrid);
@@ -132,6 +152,9 @@ const Visualizer = () => {
       newCoordinates.END_NODE_COL = col;
       newCoordinates.END_NODE_ROW = row;
       setCoordinates(newCoordinates);
+    }
+    if (weighted) {
+      newGrid = getWeightedGrid(col, row);
     }
     setGrid(newGrid);
   };
@@ -161,7 +184,7 @@ const Visualizer = () => {
     return grid.map((col, colIdx) => (
       <div className="col" key={colIdx}>
         {col.map(node => {
-          const { row, col, end, start, wall } = node;
+          const { row, col, end, start, wall, weight } = node;
           return (
             <Node
               key={row}
@@ -170,6 +193,7 @@ const Visualizer = () => {
               start={start}
               end={end}
               wall={wall}
+              weight={weight}
               mouseDown={mouseDown}
               onMouseDown={(col, row) => handleMouseDown(col, row)}
               onMouseEnter={(col, row) => handleMouseEnter(col, row)}
@@ -188,7 +212,9 @@ const Visualizer = () => {
         <button className="button" onClick={() => visualizeDijkstra()}>
           Visualize Dijkstra's Algorithm
         </button>
-        <button className="button">Add Weighted Node</button>
+        <button className="button" onClick={() => toggleWeight()}>
+          Add Weighted Node
+        </button>
       </div>
       <div className="grid">{displayGrid()}</div>
     </div>

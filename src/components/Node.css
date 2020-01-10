@@ -16,6 +16,10 @@
   background-color: #ff6f61;
 }
 
+.node-weight {
+  background-color: black;
+}
+
 .node-visited {
   animation-name: visitedAnimation;
   animation-duration: 1.5s;

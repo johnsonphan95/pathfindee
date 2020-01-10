@@ -7,6 +7,7 @@ const Node = ({
   start,
   end,
   wall,
+  weight,
   onMouseDown,
   onMouseEnter,
   onMouseUp,
@@ -16,6 +17,8 @@ const Node = ({
     ? "node-end"
     : start
     ? "node-start"
+    : weight > 0
+    ? "node-weight"
     : wall
     ? "node-wall"
     : "";
