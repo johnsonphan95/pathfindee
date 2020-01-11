@@ -42,7 +42,7 @@ const Visualizer = () => {
     const node = grid[col][row];
     const newNode = {
       ...node,
-      wall: node.start || node.end ? false : !node.wall
+      wall: !node.wall
     };
     newGrid[col][row] = newNode;
     return newGrid;
@@ -66,7 +66,7 @@ const Visualizer = () => {
     const newNode = {
       ...node,
       wall: false,
-      weight: 5
+      weight: node.weight === 0 ? 5 : 0
     };
     newGrid[col][row] = newNode;
     return newGrid;
@@ -75,8 +75,6 @@ const Visualizer = () => {
   const toggleWeight = () => {
     if (algorithm === "dijkstra") {
       weighted ? setWeighted(false) : setWeighted(true);
-    } else {
-      setWeighted(false);
     }
   };
 
