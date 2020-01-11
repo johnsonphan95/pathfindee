@@ -225,14 +225,15 @@ const Visualizer = () => {
   return (
     <div>
       <div className="navbar">
-        <div className="select">
-          <select onChange={e => setAlgorithm(e.target.value)}>
-            <option value="dijkstra" defaultValue>
+        <button className="dropdown">
+          Algorithms
+          <div className="dropdown-content">
+            <div value="dijkstra" defaultValue>
               Dijkstra's Algorithm
-            </option>
-            <option value="dfs">Depth First Search</option>
-          </select>
-        </div>
+            </div>
+            <div value="dfs">Depth First Search</div>
+          </div>
+        </button>
         <button className="button" onClick={() => visualizeAlgorithm()}>
           Visualize Dijkstra's Algorithm
         </button>
