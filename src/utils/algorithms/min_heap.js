@@ -58,8 +58,8 @@ class MinHeap {
     return valueToRemove;
   }
 
-  insert(value) {
-    this.heap.push(value);
+  insert(node) {
+    this.heap.push(node);
     this.siftUp(this.heap.length - 1, this.heap);
   }
 

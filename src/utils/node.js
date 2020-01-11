@@ -13,6 +13,7 @@ class NodeObject {
       this.col === coordinates.END_NODE_COL;
     this.wall = false;
     this.seen = false;
+    this.weight = 0;
   }
 }
 

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Node from "./Node";
 import NodeObject from "../utils/node";
-import {
-  dijkstra,
-  getNodesInShortestPathOrder
-} from "../utils/algorithms/dijkstra";
+import { dijkstra, dijkstraShortestPath } from "../utils/algorithms/dijkstra";
 import { depthFirstSearch } from "../utils/algorithms/dfs";
 import "./PathFinder.css";
 
@@ -13,6 +10,8 @@ const Visualizer = () => {
   const [mouseDown, setMouseDown] = useState(false);
   const [moveStart, setMoveStart] = useState(false);
   const [moveEnd, setMoveEnd] = useState(false);
+  const [weighted, setWeighted] = useState(false);
+  const [algorithm, setAlgorithm] = useState("dijkstra");
   const [coordinates, setCoordinates] = useState({
     START_NODE_COL: 10,
     START_NODE_ROW: 10,
@@ -60,7 +59,43 @@ const Visualizer = () => {
     return newGrid;
   };
 
-  const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
+  const getWeightedGrid = (col, row) => {
+    const newGrid = grid.slice();
+    const node = grid[col][row];
+    const newNode = {
+      ...node,
+      wall: false,
+      weight: 5
+    };
+    newGrid[col][row] = newNode;
+    return newGrid;
+  };
+
+  const toggleWeight = () => {
+    if (algorithm === "dijkstra") {
+      weighted ? setWeighted(false) : setWeighted(true);
+    } else {
+      setWeighted(false);
+    }
+  };
+
+  const getPaths = (grid, startNode, endNode) => {
+    let visitedNodesInOrder = [];
+    let nodesInShortestPathOrder = [];
+    if (algorithm === "dijkstra") {
+      visitedNodesInOrder = dijkstra(grid, startNode, endNode);
+      nodesInShortestPathOrder = dijkstraShortestPath(endNode);
+    }
+    if (algorithm === "dfs") {
+      visitedNodesInOrder = depthFirstSearch(grid, startNode, endNode);
+      nodesInShortestPathOrder = visitedNodesInOrder;
+    }
+    return [visitedNodesInOrder, nodesInShortestPathOrder];
+  };
+
+  const animateAlgorithm = paths => {
+    const visitedNodesInOrder = paths[0];
+    const nodesInShortestPathOrder = paths[1];
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
@@ -86,7 +121,7 @@ const Visualizer = () => {
     }
   };
 
-  const visualizeDijkstra = () => {
+  const visualizeAlgorithm = () => {
     const {
       START_NODE_ROW,
       START_NODE_COL,
@@ -94,11 +129,10 @@ const Visualizer = () => {
       END_NODE_COL
     } = coordinates;
     const startNode = grid[START_NODE_COL][START_NODE_ROW];
-    const finishNode = grid[END_NODE_COL][END_NODE_ROW];
-    if (startNode.visited && finishNode.visited) return;
-    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    const endNode = grid[END_NODE_COL][END_NODE_ROW];
+    if (startNode.visited && endNode.visited) return;
+    const paths = getPaths(grid, startNode, endNode);
+    animateAlgorithm(paths);
   };
 
   const handleMouseDown = (col, row) => {
@@ -106,6 +140,9 @@ const Visualizer = () => {
       setMoveStart(true);
     } else if (grid[col][row].end) {
       setMoveEnd(true);
+    } else if (weighted) {
+      const newGrid = getWeightedGrid(col, row);
+      setGrid(newGrid);
     } else {
       const newGrid = getWalledGrid(col, row);
       setGrid(newGrid);
@@ -131,6 +168,9 @@ const Visualizer = () => {
       newCoordinates.END_NODE_COL = col;
       newCoordinates.END_NODE_ROW = row;
       setCoordinates(newCoordinates);
+    }
+    if (weighted) {
+      newGrid = getWeightedGrid(col, row);
     }
     setGrid(newGrid);
   };
@@ -160,7 +200,7 @@ const Visualizer = () => {
     return grid.map((col, colIdx) => (
       <div className="col" key={colIdx}>
         {col.map(node => {
-          const { row, col, end, start, wall } = node;
+          const { row, col, end, start, wall, weight } = node;
           return (
             <Node
               key={row}
@@ -169,6 +209,7 @@ const Visualizer = () => {
               start={start}
               end={end}
               wall={wall}
+              weight={weight}
               mouseDown={mouseDown}
               onMouseDown={(col, row) => handleMouseDown(col, row)}
               onMouseEnter={(col, row) => handleMouseEnter(col, row)}
@@ -184,10 +225,21 @@ const Visualizer = () => {
   return (
     <div>
       <div className="navbar">
-        <button className="button" onClick={() => visualizeDijkstra()}>
+        <button className="dropdown">
+          Algorithms
+          <div className="dropdown-content">
+            <div value="dijkstra" defaultValue>
+              Dijkstra's Algorithm
+            </div>
+            <div value="dfs">Depth First Search</div>
+          </div>
+        </button>
+        <button className="button" onClick={() => visualizeAlgorithm()}>
           Visualize Dijkstra's Algorithm
         </button>
-        <button className="button">Add Weighted Node</button>
+        <button className="button" onClick={() => toggleWeight()}>
+          Add Weighted Node
+        </button>
       </div>
       <div className="grid">{displayGrid()}</div>
     </div>

@@ -16,6 +16,10 @@
   background-color: #ff6f61;
 }
 
+.node-weight {
+  background-color: black;
+}
+
 .node-visited {
   animation-name: visitedAnimation;
   animation-duration: 1.5s;
@@ -31,15 +35,16 @@
   0% {
     transform: scale(0.75);
     background-color: #ffda29;
+    border-radius: 50%;
   }
 
   25% {
     transform: scale(1);
     background-color: orange;
+    border-radius: 50%;
   }
 
   50% {
-    /* transform: scale(1.2); */
     background-color: crimson;
   }
 
