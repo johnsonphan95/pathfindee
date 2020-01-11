@@ -7,6 +7,7 @@ import "./PathFinder.css";
 
 const Visualizer = () => {
   const [grid, setGrid] = useState([]);
+  const [visualizing, setVisualizing] = useState("false");
   const [mouseDown, setMouseDown] = useState(false);
   const [moveStart, setMoveStart] = useState(false);
   const [moveEnd, setMoveEnd] = useState(false);
@@ -105,23 +106,25 @@ const Visualizer = () => {
       }
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
-        document.getElementById(`${node.row}-${node.col}`).className =
-          "node node-visited";
+        document.getElementById(`${node.row}-${node.col}`).className +=
+          " " + "node-visited";
       }, 10 * i);
     }
+    setVisualizing(false);
   };
 
   const animateShortestPath = nodesInShortestPathOrder => {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
         const node = nodesInShortestPathOrder[i];
-        document.getElementById(`${node.row}-${node.col}`).className =
-          "node node-shortest-path";
+        document.getElementById(`${node.row}-${node.col}`).className +=
+          " " + "node node-shortest-path";
       }, 50 * i);
     }
   };
 
   const visualizeAlgorithm = () => {
+    setVisualizing(true);
     const {
       START_NODE_ROW,
       START_NODE_COL,
@@ -145,10 +148,12 @@ const Visualizer = () => {
   };
 
   const getWeightButton = () => {
-    let style = {
+    const style = {
       display: algorithm === "dijkstra" ? "initial" : "none",
-      background: weighted ? "black" : "#74bdcb"
+      background: weighted ? "#e7f2f8" : "#74bdcb",
+      color: weighted ? "#74bdcb" : "#e7f2f8"
     };
+
     return (
       <button className="button" style={style} onClick={() => toggleWeight()}>
         Weighted Node

@@ -9,15 +9,14 @@ export const dijkstra = (grid, startNode, endNode) => {
     if (!node || node.distance === Infinity) {
       return visitedNodes;
     }
-    if (node.weight > 0) {
+    if (node.weight > 1) {
       node.weight -= 1;
       node.distance += 1;
       heap.insert(node);
+      continue;
     }
-    if (node.weight <= 0) {
-      node.visited = true;
-      visitedNodes.push(node);
-    }
+    node.visited = true;
+    visitedNodes.push(node);
     if (node === endNode) return visitedNodes;
     const unvisitedNeighbors = getUnvisitedNeighbors(node, grid);
     unvisitedNeighbors.forEach(neighbor => {
