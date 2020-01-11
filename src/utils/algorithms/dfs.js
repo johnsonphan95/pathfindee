@@ -5,7 +5,7 @@ export function depthFirstSearch(grid, startNode, endNode) {
     if (node.visited || node.wall) {
       return;
     }
-    if (node.end) {
+    if (node === endNode) {
       visitedNodes = array.slice();
     }
     const col = node.col;
@@ -19,14 +19,4 @@ export function depthFirstSearch(grid, startNode, endNode) {
   };
   dfs(startNode);
   return visitedNodes;
-}
-
-export function getNodesInShortestPathOrder(finishNode) {
-  const nodesInShortestPathOrder = [];
-  let currentNode = finishNode;
-  while (currentNode !== null) {
-    nodesInShortestPathOrder.unshift(currentNode);
-    currentNode = currentNode.previousNode;
-  }
-  return nodesInShortestPathOrder;
 }

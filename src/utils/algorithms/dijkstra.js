@@ -6,17 +6,18 @@ export const dijkstra = (grid, startNode, endNode) => {
   const heap = new MinHeap([startNode]);
   while (heap) {
     const node = heap.remove();
-    console.log(node);
     if (!node || node.distance === Infinity) {
       return visitedNodes;
     }
-    if (node.weight > 1) {
-      for (let i = node.weight; i > 0; i--) {
-        visitedNodes.push(node);
-      }
+    if (node.weight > 0) {
+      node.weight -= 1;
+      node.distance += 1;
+      heap.insert(node);
     }
-    node.visited = true;
-    visitedNodes.push(node);
+    if (node.weight <= 0) {
+      node.visited = true;
+      visitedNodes.push(node);
+    }
     if (node === endNode) return visitedNodes;
     const unvisitedNeighbors = getUnvisitedNeighbors(node, grid);
     unvisitedNeighbors.forEach(neighbor => {
@@ -40,7 +41,7 @@ const getUnvisitedNeighbors = (node, grid) => {
   return neighbors.filter(neighbor => !neighbor.visited && !neighbor.wall);
 };
 
-export const getNodesInShortestPathOrder = endNode => {
+export const dijkstraShortestPath = endNode => {
   const shortestPath = [];
   let node = endNode;
   while (node !== null) {

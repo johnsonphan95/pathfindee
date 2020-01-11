@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Node from "./Node";
 import NodeObject from "../utils/node";
-import {
-  dijkstra,
-  getNodesInShortestPathOrder
-} from "../utils/algorithms/dijkstra";
+import { dijkstra, dijkstraShortestPath } from "../utils/algorithms/dijkstra";
 import { depthFirstSearch } from "../utils/algorithms/dfs";
 import "./PathFinder.css";
 
@@ -14,6 +11,7 @@ const Visualizer = () => {
   const [moveStart, setMoveStart] = useState(false);
   const [moveEnd, setMoveEnd] = useState(false);
   const [weighted, setWeighted] = useState(false);
+  const [algorithm, setAlgorithm] = useState("dijkstra");
   const [coordinates, setCoordinates] = useState({
     START_NODE_COL: 10,
     START_NODE_ROW: 10,
@@ -66,6 +64,7 @@ const Visualizer = () => {
     const node = grid[col][row];
     const newNode = {
       ...node,
+      wall: false,
       weight: 5
     };
     newGrid[col][row] = newNode;
@@ -73,11 +72,30 @@ const Visualizer = () => {
   };
 
   const toggleWeight = () => {
-    weighted ? setWeighted(false) : setWeighted(true);
-    console.log(weighted);
+    if (algorithm === "dijkstra") {
+      weighted ? setWeighted(false) : setWeighted(true);
+    } else {
+      setWeighted(false);
+    }
   };
 
-  const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
+  const getPaths = (grid, startNode, endNode) => {
+    let visitedNodesInOrder = [];
+    let nodesInShortestPathOrder = [];
+    if (algorithm === "dijkstra") {
+      visitedNodesInOrder = dijkstra(grid, startNode, endNode);
+      nodesInShortestPathOrder = dijkstraShortestPath(endNode);
+    }
+    if (algorithm === "dfs") {
+      visitedNodesInOrder = depthFirstSearch(grid, startNode, endNode);
+      nodesInShortestPathOrder = visitedNodesInOrder;
+    }
+    return [visitedNodesInOrder, nodesInShortestPathOrder];
+  };
+
+  const animateAlgorithm = paths => {
+    const visitedNodesInOrder = paths[0];
+    const nodesInShortestPathOrder = paths[1];
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
@@ -103,7 +121,7 @@ const Visualizer = () => {
     }
   };
 
-  const visualizeDijkstra = () => {
+  const visualizeAlgorithm = () => {
     const {
       START_NODE_ROW,
       START_NODE_COL,
@@ -111,12 +129,10 @@ const Visualizer = () => {
       END_NODE_COL
     } = coordinates;
     const startNode = grid[START_NODE_COL][START_NODE_ROW];
-    const finishNode = grid[END_NODE_COL][END_NODE_ROW];
-    if (startNode.visited && finishNode.visited) return;
-    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-    console.log(visitedNodesInOrder);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    const endNode = grid[END_NODE_COL][END_NODE_ROW];
+    if (startNode.visited && endNode.visited) return;
+    const paths = getPaths(grid, startNode, endNode);
+    animateAlgorithm(paths);
   };
 
   const handleMouseDown = (col, row) => {
@@ -209,7 +225,15 @@ const Visualizer = () => {
   return (
     <div>
       <div className="navbar">
-        <button className="button" onClick={() => visualizeDijkstra()}>
+        <div className="select">
+          <select onChange={e => setAlgorithm(e.target.value)}>
+            <option value="dijkstra" defaultValue>
+              Dijkstra's Algorithm
+            </option>
+            <option value="dfs">Depth First Search</option>
+          </select>
+        </div>
+        <button className="button" onClick={() => visualizeAlgorithm()}>
           Visualize Dijkstra's Algorithm
         </button>
         <button className="button" onClick={() => toggleWeight()}>
