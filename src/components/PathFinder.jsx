@@ -135,6 +135,27 @@ const Visualizer = () => {
     animateAlgorithm(paths);
   };
 
+  const getAlgorithmName = () => {
+    if (algorithm === "dijkstra") {
+      return "Dijkstra's Algorithm";
+    }
+    if (algorithm === "dfs") {
+      return "Depth First Search";
+    }
+  };
+
+  const getWeightButton = () => {
+    let style = {
+      display: algorithm === "dijkstra" ? "initial" : "none",
+      background: weighted ? "black" : "#74bdcb"
+    };
+    return (
+      <button className="button" style={style} onClick={() => toggleWeight()}>
+        Weighted Node
+      </button>
+    );
+  };
+
   const handleMouseDown = (col, row) => {
     if (grid[col][row].start) {
       setMoveStart(true);
@@ -228,18 +249,22 @@ const Visualizer = () => {
         <button className="dropdown">
           Algorithms
           <div className="dropdown-content">
-            <div value="dijkstra" defaultValue>
+            <div
+              id="dijkstra"
+              defaultValue
+              onClick={e => setAlgorithm(e.target.id)}
+            >
               Dijkstra's Algorithm
             </div>
-            <div value="dfs">Depth First Search</div>
+            <div id="dfs" onClick={e => setAlgorithm(e.target.id)}>
+              Depth First Search
+            </div>
           </div>
         </button>
         <button className="button" onClick={() => visualizeAlgorithm()}>
-          Visualize Dijkstra's Algorithm
+          Visualize {getAlgorithmName()}
         </button>
-        <button className="button" onClick={() => toggleWeight()}>
-          Add Weighted Node
-        </button>
+        {getWeightButton()}
       </div>
       <div className="grid">{displayGrid()}</div>
     </div>
