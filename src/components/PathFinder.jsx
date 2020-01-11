@@ -97,7 +97,6 @@ const Visualizer = () => {
     const finishNode = grid[END_NODE_COL][END_NODE_ROW];
     if (startNode.visited && finishNode.visited) return;
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-    console.log(visitedNodesInOrder);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   };
