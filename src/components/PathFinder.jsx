@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Node from "./Node";
 import NodeObject from "../utils/node";
+import { aStar, aStarShortestPath } from "../utils/algorithms/astar";
 import { dijkstra, dijkstraShortestPath } from "../utils/algorithms/dijkstra";
 import { depthFirstSearch } from "../utils/algorithms/dfs";
 import { breadthFirstSearch, bfsShortestPath } from "../utils/algorithms/bfs";
@@ -14,7 +15,7 @@ const Visualizer = () => {
   const [moveStart, setMoveStart] = useState(false);
   const [moveEnd, setMoveEnd] = useState(false);
   const [weighted, setWeighted] = useState(false);
-  const [algorithm, setAlgorithm] = useState("dijkstra");
+  const [algorithm, setAlgorithm] = useState("");
   const [coordinates, setCoordinates] = useState({
     START_NODE_COL: 10,
     START_NODE_ROW: 10,
@@ -68,14 +69,14 @@ const Visualizer = () => {
     const newNode = {
       ...node,
       wall: false,
-      weight: node.weight === 0 ? 5 : 0
+      weight: node.weight === 0 ? 10 : 0
     };
     newGrid[col][row] = newNode;
     return newGrid;
   };
 
   const toggleWeight = () => {
-    if (algorithm === "dijkstra") {
+    if (algorithm === "dijkstra" || algorithm === "a*") {
       weighted ? setWeighted(false) : setWeighted(true);
     }
   };
@@ -86,6 +87,10 @@ const Visualizer = () => {
     if (algorithm === "dijkstra") {
       visitedNodesInOrder = dijkstra(grid, startNode, endNode);
       nodesInShortestPathOrder = dijkstraShortestPath(endNode);
+    }
+    if (algorithm === "a*") {
+      visitedNodesInOrder = aStar(grid, startNode, endNode);
+      nodesInShortestPathOrder = aStarShortestPath(endNode);
     }
     if (algorithm === "dfs") {
       visitedNodesInOrder = depthFirstSearch(grid, startNode, endNode);
@@ -102,7 +107,7 @@ const Visualizer = () => {
     e.preventDefault();
     setAlgorithm(e.target.id);
     const newGrid = grid.slice();
-    if (e.target.id === "dijkstra") {
+    if (e.target.id === "dijkstra" || e.target.id === "a*") {
       newGrid.map(col =>
         col.map(node => {
           node.visited = false;
@@ -173,6 +178,12 @@ const Visualizer = () => {
   };
 
   const getAlgorithmName = () => {
+    if (algorithm === "") {
+      return "Choose an Algorithm";
+    }
+    if (algorithm === "a*") {
+      return "A*";
+    }
     if (algorithm === "dijkstra") {
       return "Dijkstra's";
     }
@@ -186,7 +197,12 @@ const Visualizer = () => {
 
   const getWeightButton = () => {
     const style = {
-      display: algorithm === "dijkstra" ? "initial" : "none",
+      display:
+        algorithm === "dijkstra"
+          ? "initial"
+          : algorithm === "a*"
+          ? "initial"
+          : "none",
       background: weighted ? "#e7f2f8" : "#74bdcb",
       color: weighted ? "#74bdcb" : "#e7f2f8"
     };
@@ -201,7 +217,15 @@ const Visualizer = () => {
   const getMainButton = () => {
     let text;
     let func;
-    if (finished || finding) {
+
+    const noAlgoAlert = () => {
+      alert("Choose an Algorithm!");
+    };
+
+    if (algorithm === "") {
+      text = "Choose an Algorithm";
+      func = noAlgoAlert;
+    } else if (finished || finding) {
       text = "Reset";
       func = resetGrid;
     } else {
@@ -315,6 +339,9 @@ const Visualizer = () => {
         <button className="dropdown">
           Algorithms
           <div className="dropdown-content">
+            <div id="a*" defaultValue onClick={e => changeAlgorithm(e)}>
+              A* Algorithm
+            </div>
             <div id="dijkstra" defaultValue onClick={e => changeAlgorithm(e)}>
               Dijkstra's Algorithm
             </div>
