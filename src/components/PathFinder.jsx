@@ -3,6 +3,7 @@ import Node from "./Node";
 import NodeObject from "../utils/node";
 import { dijkstra, dijkstraShortestPath } from "../utils/algorithms/dijkstra";
 import { depthFirstSearch } from "../utils/algorithms/dfs";
+import { breadthFirstSearch, bfsShortestPath } from "../utils/algorithms/bfs";
 import "./PathFinder.css";
 
 const Visualizer = () => {
@@ -90,6 +91,10 @@ const Visualizer = () => {
       visitedNodesInOrder = depthFirstSearch(grid, startNode, endNode);
       nodesInShortestPathOrder = visitedNodesInOrder;
     }
+    if (algorithm === "bfs") {
+      visitedNodesInOrder = breadthFirstSearch(grid, startNode, endNode);
+      nodesInShortestPathOrder = bfsShortestPath(endNode);
+    }
     return [visitedNodesInOrder, nodesInShortestPathOrder];
   };
 
@@ -173,6 +178,9 @@ const Visualizer = () => {
     }
     if (algorithm === "dfs") {
       return "Depth First Search";
+    }
+    if (algorithm === "bfs") {
+      return "Breadth First Search";
     }
   };
 
@@ -312,6 +320,9 @@ const Visualizer = () => {
             </div>
             <div id="dfs" onClick={e => changeAlgorithm(e)}>
               Depth First Search
+            </div>
+            <div id="bfs" onClick={e => changeAlgorithm(e)}>
+              Breadth First Search
             </div>
           </div>
         </button>
