@@ -7,7 +7,8 @@ import "./PathFinder.css";
 
 const Visualizer = () => {
   const [grid, setGrid] = useState([]);
-  const [visualizing, setVisualizing] = useState("false");
+  const [finished, setFinished] = useState(false);
+  const [finding, setFinding] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [moveStart, setMoveStart] = useState(false);
   const [moveEnd, setMoveEnd] = useState(false);
@@ -92,6 +93,35 @@ const Visualizer = () => {
     return [visitedNodesInOrder, nodesInShortestPathOrder];
   };
 
+  const changeAlgorithm = e => {
+    e.preventDefault();
+    setAlgorithm(e.target.id);
+    const newGrid = grid.slice();
+    if (e.target.id === "dijkstra") {
+      newGrid.map(col =>
+        col.map(node => {
+          node.visited = false;
+          node.distance = 0;
+          node.seen = false;
+          node.prev = null;
+        })
+      );
+    } else {
+      newGrid.map(col =>
+        col.map(node => {
+          node.visited = false;
+          node.weight = 0;
+        })
+      );
+    }
+    setGrid(newGrid);
+  };
+
+  const resetGrid = () => {
+    const newGrid = getInitialGrid();
+    setGrid(newGrid);
+  };
+
   const animateAlgorithm = paths => {
     const visitedNodesInOrder = paths[0];
     const nodesInShortestPathOrder = paths[1];
@@ -108,7 +138,6 @@ const Visualizer = () => {
           " " + "node-visited";
       }, 10 * i);
     }
-    setVisualizing(false);
   };
 
   const animateShortestPath = nodesInShortestPathOrder => {
@@ -119,10 +148,12 @@ const Visualizer = () => {
           " " + "node node-shortest-path";
       }, 50 * i);
     }
+    setFinding(false);
+    setFinished(true);
   };
 
   const visualizeAlgorithm = () => {
-    setVisualizing(true);
+    setFinding(true);
     const {
       START_NODE_ROW,
       START_NODE_COL,
@@ -138,7 +169,7 @@ const Visualizer = () => {
 
   const getAlgorithmName = () => {
     if (algorithm === "dijkstra") {
-      return "Dijkstra's Algorithm";
+      return "Dijkstra's";
     }
     if (algorithm === "dfs") {
       return "Depth First Search";
@@ -159,7 +190,28 @@ const Visualizer = () => {
     );
   };
 
+  const getMainButton = () => {
+    let text;
+    let func;
+    if (finished || finding) {
+      text = "Reset";
+      func = resetGrid;
+    } else {
+      text = `Visualize ${getAlgorithmName()}`;
+      func = visualizeAlgorithm;
+    }
+
+    return (
+      <button className="button" onClick={() => func()}>
+        {text}
+      </button>
+    );
+  };
+
   const handleMouseDown = (col, row) => {
+    if (finding) {
+      return;
+    }
     if (grid[col][row].start) {
       setMoveStart(true);
     } else if (grid[col][row].end) {
@@ -247,26 +299,23 @@ const Visualizer = () => {
   };
 
   return (
-    <div>
+    <div
+      onMouseDown={() => setMouseDown(true)}
+      onMouseUp={() => handleMouseUp()}
+    >
       <div className="navbar">
         <button className="dropdown">
           Algorithms
           <div className="dropdown-content">
-            <div
-              id="dijkstra"
-              defaultValue
-              onClick={e => setAlgorithm(e.target.id)}
-            >
+            <div id="dijkstra" defaultValue onClick={e => changeAlgorithm(e)}>
               Dijkstra's Algorithm
             </div>
-            <div id="dfs" onClick={e => setAlgorithm(e.target.id)}>
+            <div id="dfs" onClick={e => changeAlgorithm(e)}>
               Depth First Search
             </div>
           </div>
         </button>
-        <button className="button" onClick={() => visualizeAlgorithm()}>
-          Visualize {getAlgorithmName()}
-        </button>
+        {getMainButton()}
         {getWeightButton()}
       </div>
       <div className="grid">{displayGrid()}</div>
