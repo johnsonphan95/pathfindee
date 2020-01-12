@@ -223,7 +223,7 @@ const Visualizer = () => {
     };
 
     if (algorithm === "") {
-      text = "Choose an Algorithm";
+      text = "Choose an Algorithm!";
       func = noAlgoAlert;
     } else if (finished || finding) {
       text = "Reset";
@@ -337,7 +337,7 @@ const Visualizer = () => {
     >
       <div className="navbar">
         <button className="dropdown">
-          Algorithms
+          &#9660; Algorithms &#9660;
           <div className="dropdown-content">
             <div id="a*" defaultValue onClick={e => changeAlgorithm(e)}>
               A* Algorithm
