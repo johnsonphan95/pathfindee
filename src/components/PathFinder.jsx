@@ -355,7 +355,7 @@ const Visualizer = () => {
   return (
     <div>
       <div className="navbar">
-        <p className="logo">Pathfinding Visualizer</p>
+        <p className="logo">Pathfindee</p>
         <div className="buttons">
           <button className="dropdown">
             &#9660; Algorithms &#9660;
@@ -376,6 +376,14 @@ const Visualizer = () => {
           </button>
           {getMainButton()}
           {getWeightButton()}
+        </div>
+        <div className="legend" style={{ display: "flex" }}>
+          <div style={{ color: "black" }}>&#9679;</div>
+          <label>weighted </label>
+          <div style={{ color: "#81894e" }}>&#9632;</div>
+          <label>start </label>
+          <div style={{ color: "#de98ab" }}>&#9632;</div>
+          <label>end</label>
         </div>
       </div>
       <div className="grid">{displayGrid()}</div>

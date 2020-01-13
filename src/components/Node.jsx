@@ -22,6 +22,7 @@ const Node = ({
     : wall
     ? "node-wall"
     : "";
+
   return (
     <div
       id={`${row}-${col}`}
