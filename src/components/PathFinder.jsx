@@ -69,7 +69,7 @@ const Visualizer = () => {
     const newNode = {
       ...node,
       wall: false,
-      weight: node.weight === 0 ? 10 : 0
+      weight: node.weight === 0 ? 5 : 0
     };
     newGrid[col][row] = newNode;
     return newGrid;

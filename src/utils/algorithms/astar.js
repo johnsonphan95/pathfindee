@@ -11,7 +11,7 @@ export const aStar = (grid, startNode, endNode) => {
     }
     if (node.weight > 1) {
       node.weight -= 1;
-      node.distance = manhattanDistance(node, endNode, node.weight);
+      node.distance = getCost(node, startNode, endNode, node.weight);
       heap.insert(node);
       continue;
     }
@@ -22,7 +22,7 @@ export const aStar = (grid, startNode, endNode) => {
     unvisitedNeighbors.forEach(neighbor => {
       if (neighbor.seen || neighbor.wall) return;
       neighbor.seen = true;
-      neighbor.distance = manhattanDistance(neighbor, endNode);
+      neighbor.distance = getCost(neighbor, startNode, endNode);
       neighbor.prev = node;
       heap.insert(neighbor);
     });
@@ -39,10 +39,12 @@ const getUnvisitedNeighbors = (node, grid) => {
   return neighbors.filter(neighbor => !neighbor.visited && !neighbor.wall);
 };
 
-const manhattanDistance = (node, endNode, weight = 1) => {
+const getCost = (node, startNode, endNode, weight = 1) => {
   return (
-    weight *
-    (Math.abs(node.col - endNode.col) + Math.abs(node.row - endNode.row))
+    (weight / 7) *
+      Math.hypot(startNode.row - node.row, startNode.col - node.col) +
+    Math.abs(node.col - endNode.col) +
+    Math.abs(node.row - endNode.row)
   );
 };
 

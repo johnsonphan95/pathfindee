@@ -10,7 +10,7 @@
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.0"
   },
-  "homepage": "http://johnsonphan95.github.io/visualizer",
+  "homepage": "http://johnsonphan95.github.io/pathfindee",
   "scripts": {
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
