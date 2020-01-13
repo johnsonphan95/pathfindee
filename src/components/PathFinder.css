@@ -1,3 +1,10 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: #263056;
+  height: 50px;
+}
+
 .grid {
   display: flex;
   margin: 5% auto;
@@ -6,11 +13,25 @@
   justify-content: space-evenly;
 }
 
+.logo {
+  position: absolute;
+  color: #e7f2f8;
+  font-weight: bold;
+  top: -15px;
+  font-size: 35px;
+  margin: 20px;
+}
+
 .col {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   width: 2%;
+}
+
+.buttons {
+  position: relative;
+  margin: 0 auto;
 }
 
 .button {
@@ -28,13 +49,6 @@
 .button:hover {
   background-color: #e7f2f8;
   color: #74bdcb;
-}
-
-.navbar {
-  display: flex;
-  justify-content: center;
-  background-color: #263056;
-  height: 50px;
 }
 
 .dropdown {

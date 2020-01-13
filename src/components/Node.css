@@ -46,13 +46,12 @@
   }
 
   50% {
-    background: crimson;
-    opacity: 0.75;
+    background: red;
   }
 
   75% {
     transform: scale(1.5);
-    background: orangered;
+    background: purple;
   }
 
   100% {
@@ -84,6 +83,7 @@
 
   50% {
     transform: scale(1.5);
+    background: purple;
   }
 
   100% {

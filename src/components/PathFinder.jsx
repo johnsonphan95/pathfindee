@@ -128,7 +128,26 @@ const Visualizer = () => {
   };
 
   const resetGrid = () => {
-    const newGrid = getInitialGrid();
+    if (!finished) return;
+    let visited = document.getElementsByClassName("node-visited");
+    while (visited.length) {
+      visited[0].className = "node";
+    }
+    document.getElementById(
+      `${coordinates.START_NODE_ROW}-${coordinates.START_NODE_COL}`
+    ).className = "node node-start";
+    document.getElementById(
+      `${coordinates.END_NODE_ROW}-${coordinates.END_NODE_COL}`
+    ).className = "node node-end";
+    const newGrid = [];
+    for (let col = 0; col < 40; col++) {
+      const curr = [];
+      for (let row = 0; row < 20; row++) {
+        curr.push(new NodeObject(col, row, coordinates));
+      }
+      newGrid.push(curr);
+    }
+    setFinished(false);
     setGrid(newGrid);
   };
 
@@ -139,27 +158,30 @@ const Visualizer = () => {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
           animateShortestPath(nodesInShortestPathOrder);
-        }, 10 * i);
+        }, 20 * i);
         return;
       }
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         document.getElementById(`${node.row}-${node.col}`).className +=
           " " + "node-visited";
-      }, 10 * i);
+      }, 20 * i);
     }
   };
 
   const animateShortestPath = nodesInShortestPathOrder => {
+    const delay = algorithm === "dfs" ? 20 : 50;
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
+        if (i === nodesInShortestPathOrder.length - 1) {
+          setFinished(true);
+          setFinding(false);
+        }
         const node = nodesInShortestPathOrder[i];
         document.getElementById(`${node.row}-${node.col}`).className +=
           " " + "node node-shortest-path";
-      }, 50 * i);
+      }, delay * i);
     }
-    setFinding(false);
-    setFinished(true);
   };
 
   const visualizeAlgorithm = () => {
@@ -331,30 +353,30 @@ const Visualizer = () => {
   };
 
   return (
-    <div
-      onMouseDown={() => setMouseDown(true)}
-      onMouseUp={() => handleMouseUp()}
-    >
+    <div>
       <div className="navbar">
-        <button className="dropdown">
-          &#9660; Algorithms &#9660;
-          <div className="dropdown-content">
-            <div id="a*" defaultValue onClick={e => changeAlgorithm(e)}>
-              A* Algorithm
+        <p className="logo">Pathfinding Visualizer</p>
+        <div className="buttons">
+          <button className="dropdown">
+            &#9660; Algorithms &#9660;
+            <div className="dropdown-content">
+              <div id="a*" defaultValue onClick={e => changeAlgorithm(e)}>
+                A* Algorithm
+              </div>
+              <div id="dijkstra" defaultValue onClick={e => changeAlgorithm(e)}>
+                Dijkstra's Algorithm
+              </div>
+              <div id="dfs" onClick={e => changeAlgorithm(e)}>
+                Depth First Search
+              </div>
+              <div id="bfs" onClick={e => changeAlgorithm(e)}>
+                Breadth First Search
+              </div>
             </div>
-            <div id="dijkstra" defaultValue onClick={e => changeAlgorithm(e)}>
-              Dijkstra's Algorithm
-            </div>
-            <div id="dfs" onClick={e => changeAlgorithm(e)}>
-              Depth First Search
-            </div>
-            <div id="bfs" onClick={e => changeAlgorithm(e)}>
-              Breadth First Search
-            </div>
-          </div>
-        </button>
-        {getMainButton()}
-        {getWeightButton()}
+          </button>
+          {getMainButton()}
+          {getWeightButton()}
+        </div>
       </div>
       <div className="grid">{displayGrid()}</div>
     </div>
