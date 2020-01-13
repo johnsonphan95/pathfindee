@@ -287,13 +287,15 @@ const Visualizer = () => {
     if (!moveStart && !moveEnd) {
       newGrid = getWalledGrid(col, row);
     }
-    if (moveStart) {
+    if (moveStart && !moveEnd) {
+      if (grid[col][row].end) return;
       newGrid = getNewNodeGrid(col, row);
       newCoordinates.START_NODE_COL = col;
       newCoordinates.START_NODE_ROW = row;
       setCoordinates(newCoordinates);
     }
-    if (moveEnd) {
+    if (moveEnd && !moveStart) {
+      if (grid[col][row].start) return;
       newGrid = getNewNodeGrid(col, row);
       newCoordinates.END_NODE_COL = col;
       newCoordinates.END_NODE_ROW = row;
@@ -308,6 +310,12 @@ const Visualizer = () => {
   const handleMouseLeave = (col, row) => {
     if (!mouseDown) return;
     if (moveStart || moveEnd) {
+      if (
+        (moveStart && grid[col][row].end) ||
+        (moveEnd && grid[col][row].start)
+      ) {
+        return;
+      }
       const newGrid = grid.slice();
       const node = grid[col][row];
       const newNode = {
