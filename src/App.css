@@ -8,3 +8,33 @@ body {
   width: 100%;
   height: 100%;
 }
+
+footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 75px;
+  background: #009499;
+  color: wh74bdcbite;
+  font-weight: bold;
+}
+
+footer div {
+  color: #263056;
+  background: #74bdcb;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+footer a {
+  color: #263056;
+}
+
+footer #icon {
+  font-size: 4rem;
+}
+
+footer #icon:hover {
+  color: #e7f2f8;
+}

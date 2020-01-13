@@ -7,7 +7,7 @@
 
 .grid {
   display: flex;
-  margin: 5% auto;
+  margin: 1.5% auto;
   width: 80vw;
   height: 40vw;
   justify-content: space-evenly;
