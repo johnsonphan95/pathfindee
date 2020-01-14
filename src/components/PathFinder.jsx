@@ -77,7 +77,11 @@ const Visualizer = () => {
   };
 
   const toggleWeight = () => {
-    if (algorithm === "dijkstra" || algorithm === "a*") {
+    if (
+      algorithm === "dijkstra" ||
+      algorithm === "a*" ||
+      algorithm === "greedy"
+    ) {
       weighted ? setWeighted(false) : setWeighted(true);
     }
   };

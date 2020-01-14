@@ -33,9 +33,9 @@ const getUnvisitedNeighbors = (node, grid) => {
   const neighbors = [];
   const { row, col } = node;
   if (row > 0) neighbors.push(grid[col][row - 1]);
+  if (col < grid.length - 1) neighbors.push(grid[col + 1][row]);
   if (row < grid[0].length - 1) neighbors.push(grid[col][row + 1]);
   if (col > 0) neighbors.push(grid[col - 1][row]);
-  if (col < grid.length - 1) neighbors.push(grid[col + 1][row]);
   return neighbors.filter(neighbor => !neighbor.visited && !neighbor.wall);
 };
 
