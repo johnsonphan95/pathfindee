@@ -41,7 +41,7 @@ const getUnvisitedNeighbors = (node, grid) => {
 
 const getCost = (node, startNode, endNode, weight = 1) => {
   return (
-    (weight / 3) *
+    (weight / 7) *
       Math.hypot(startNode.row - node.row, startNode.col - node.col) +
     Math.abs(node.col - endNode.col) +
     Math.abs(node.row - endNode.row)

@@ -25,6 +25,7 @@ const Node = ({
 
   return (
     <div
+      // style={{ margin: "0 auto" }}
       id={`${row}-${col}`}
       className={`node ${attributes}`}
       onMouseDown={() => onMouseDown(col, row)}

@@ -386,7 +386,7 @@ const Visualizer = () => {
           {getWeightButton()}
         </div>
         <div className="legend" style={{ display: "flex" }}>
-          <div style={{ color: "black" }}>&#9679;</div>
+          <div style={{ color: "blue" }}>&#9679;</div>
           <label>weighted </label>
           <div style={{ color: "#81894e" }}>&#9632;</div>
           <label>start </label>
