@@ -5,6 +5,7 @@ import { aStar, aStarShortestPath } from "../utils/algorithms/astar";
 import { dijkstra, dijkstraShortestPath } from "../utils/algorithms/dijkstra";
 import { depthFirstSearch } from "../utils/algorithms/dfs";
 import { breadthFirstSearch, bfsShortestPath } from "../utils/algorithms/bfs";
+import { greedyBFS, greedyShortestPath } from "../utils/algorithms/greedybfs";
 import "./PathFinder.css";
 
 const Visualizer = () => {
@@ -92,6 +93,10 @@ const Visualizer = () => {
       visitedNodesInOrder = aStar(grid, startNode, endNode);
       nodesInShortestPathOrder = aStarShortestPath(endNode);
     }
+    if (algorithm === "greedy") {
+      visitedNodesInOrder = greedyBFS(grid, startNode, endNode);
+      nodesInShortestPathOrder = greedyShortestPath(endNode);
+    }
     if (algorithm === "dfs") {
       visitedNodesInOrder = depthFirstSearch(grid, startNode, endNode);
       nodesInShortestPathOrder = visitedNodesInOrder;
@@ -107,7 +112,11 @@ const Visualizer = () => {
     e.preventDefault();
     setAlgorithm(e.target.id);
     const newGrid = grid.slice();
-    if (e.target.id === "dijkstra" || e.target.id === "a*") {
+    if (
+      e.target.id === "dijkstra" ||
+      e.target.id === "a*" ||
+      e.target.id === "greedy"
+    ) {
       newGrid.map(col =>
         col.map(node => {
           node.visited = false;
@@ -206,6 +215,9 @@ const Visualizer = () => {
     if (algorithm === "a*") {
       return "A*";
     }
+    if (algorithm === "greedy") {
+      return "Greedy";
+    }
     if (algorithm === "dijkstra") {
       return "Dijkstra's";
     }
@@ -223,6 +235,8 @@ const Visualizer = () => {
         algorithm === "dijkstra"
           ? "initial"
           : algorithm === "a*"
+          ? "initial"
+          : algorithm === "greedy"
           ? "initial"
           : "none",
       background: weighted ? "#e7f2f8" : "#74bdcb",
@@ -373,6 +387,9 @@ const Visualizer = () => {
               </div>
               <div id="dijkstra" defaultValue onClick={e => changeAlgorithm(e)}>
                 Dijkstra's Algorithm
+              </div>
+              <div id="greedy" onClick={e => changeAlgorithm(e)}>
+                Greedy's Best-first Search
               </div>
               <div id="dfs" onClick={e => changeAlgorithm(e)}>
                 Depth First Search
