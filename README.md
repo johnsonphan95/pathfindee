@@ -2,7 +2,11 @@
 
 https://johnsonphan95.github.io/pathfindee/
 
-Visualizer is a visualization project I made using React to visualize path finding algorithm's through a coordinate grid. Each square in the grid is substantiated as a NodeObject. 
+Visualizer is a visualization project I made using React to visualize path finding algorithm's through a coordinate grid. Each square in the grid is substantiated as a NodeObject.
+
+<p align="center>
+  <img src="pathfindee.gif" width="750" title="pathfindee-gif">   
+</p>
 
 ## Available Scripts
 
